@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html>  
+<head>
+	<title>Agattiyar - Transliteration/Font Conversion/Proof Read helper tool</title>
+</head>
+<body>  
+	<link rel="stylesheet" href="popup_modal_engine.css">
+
+<script type="text/javascript" src="Rich_NiceEdit.js"></script> 
+<script src="TransliterateToolEngine.h"> </script>
+<script type="text/javascript" src="TransliterateToolUIScript.js">
+</script>
+<div><table border=0 align=left>
+<tr>
+    <td /> <img width=150 height=200 src="0029-22_Agastya_rama.png"/>
+    <td><p><h1 style="color:darkred">அகத்தியர்</h1>
+     <h3/><BR><BR><p align=right id="version_str" onfocus="getVersion()" ondblclick="enterDesignMode()" style="display:block">  </p>
+     </td>
+</tr>
+</table></div>
+<div><table>
+<tr><td>
+    <table border=1>
+    <tr>
+    <td>
+        <b>Step 1: Transliteration  Tool options</b></td>
+    </tr>
+    <tr>
+        <td ><b>Sloka type: </b>
+            <select id ="sloka_type"  required align=right onchange="onSlokaTypeChange()"> 
+            </select>
+        </td>   
+    </tr>
+    <tr>
+        <td ><b>Word Separator: </b>
+            <select id ="wordSepList"  required align=right> 
+            </select>
+        </td>       
+    </tr>
+    <tr >
+        <td ><b>Transliterate from:</b> 
+            <select id ="TransOption" required  align=right> 
+            </select> 
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <b>Use Diacritics - [numbers]:</b> 
+            <select id="use_numbers" onchange="useNumbersChecked('use_numbers','confirm_translit','confirm_translit_prmpt')" required align=right>
+                <option value="0"/> None
+                <option value="1"/> Normal
+                <option value="2" style="display:none"/> Numbers-Subscript       
+                <option value="3" style="display:none"/> Numbers-Superscript       
+            </select><BR>
+            <BR><b style="font-size: 12pt;""> To view candra bindu in Bengali verse type, <BR>download and install BBT_TM_Nityananda Font. </b>
+            <b id="confirm_translit_prmpt" style="font-size: 12pt;display:none"><input type="checkbox" id="confirm_translit" >Prompt/Resolve conflict manually  </b>
+        </td>
+    </tr>
+    </table>
+</td>
+<td>
+    <table border=0 >
+    <tr>
+    <td>
+    <h2 style="color:darkorange"/>தமிழ், வடமொழி, வங்காளம்  <BR>
+    எழுத்துப்பெயர்ப்பு கருவி </p> 
+    </td> 
+    </tr>
+    </table>
+</td>
+</tr>
+</table></div>
+
+<BR>
+<div id="Spell_check_options_group" style="display:none">
+<table border=0 bgcolor=lightgrey> <b>TamilGuide Tool options</b>
+<tr>
+    <td align=left><b>1. Type or paste [paragraph in the input text area on left. <BR>
+    2. For non-unicode text, convert to Unicode first, using the appropriate options.. <BR>
+      </b>
+    </td>
+    </tr>
+    <tr>
+    <td> Select the file containing the TamilGuide:
+    </td>
+    <td> Select the file containing the contents for TamilGuide check [or] copy paste contents to check into input text area:
+    <input type='file' id='spell-file-input_contents'  onchange="loadTextArea('spell-file-input','ip-file-content')" style="background-color:#FFF18F"/>
+    </td>
+</tr>
+</table>
+</div>
+
+ <div><textarea name="spellCheck-file-content_hidden"  id='spellCheck-file-content_hidden' rows="40" cols = "80" style="background-color:#8FF88F;display:none;font-family:BBT-TM-Nitayanda; font-size: 14pt;"></textarea>
+</div>
+
+
+<div>    
+<table border=1 >
+<tr style="color:darkblue;background-color:#A4AFFF">
+    <td ><b><center>Step 2: </center><BR>Load text from (.txt) file:  <BR>  
+    <input type='file' id='file-input'  onchange="loadTextArea('file-input','ip-file-content')" style="background-color:#FFF18F"/>    
+    <BR>[OR] Paste unicode text in text area below<BR>
+<td><b><center>Step 3:</center><BR> Function(s) to execute:<BR> [Click] - buttons below</b></td>
+        <td><center/><b>Result: Transliterated Text!</b> </td>
+</tr>
+<tr>
+    <td><textarea name="ip-file-content" id='ip-file-content' rows="20" cols = "50" style="background-color:lightblue;font-family:BBT-TM-Nitayanda; font-size: 14pt;"></textarea></td>
+    <td>
+        <table border=0><tr>
+            <td><text style="font-size: 12pt;background-color:#F0F18F"/><b>Font Conv. options</b></td>
+            <td><text style="font-size: 12pt;background-color:#F0F18F"/>Setup/Actions</td></tr><tr>
+            <td><text style="font-size: 12pt;background-color:#F0F18F"/>choose font</td>
+            <td><select id='convert_unicode'  required  align=right  style="background-color:#FFF18F" onchange="onConvertUniFontSelectionChanged('convert_unicode', 'load_font_mapper_file', 'font_mapper_from_server_listCtl', 'convert_to_uni')">
+            </select></td></tr><tr>
+                <td><text id="load_font_mapper_static" style="font-size: 12pt;background-color:#F0F18F"/> choose font mapper <BR>[OR] select from the server</td>
+                <td><input  id='load_font_mapper_file' type='file' style="display:none;background-color:#F0F18F" onchange="loadFontMapperCSV('load_font_mapper_file', 'convert_to_uni', 'convert_to_non_uni')"/>
+                    <select id="font_mapper_from_server_listCtl" 
+                    required  align=right  style="background-color:#FFF18F;display:none" 
+                    onchange="onFontMapperFileFromServerChanged('font_mapper_from_server_listCtl', 'convert_to_uni', 'convert_to_non_uni')">
+                    </select></td></tr><tr>
+                <td><text style="font-size: 12pt;background-color:#F0F18F"/>Unicode<=>non-unicode?</td>
+                <td><input  id='convert_to_uni' value='Convert to unicode' type='button' onclick="convertToUnicode('convert_unicode', 'ip-file-content', 'load_font_mapper_file')" style="cursor:pointer;font-size: 12pt;background-color:#1fe7ee93"/>
+                    <input disabled  id='convert_to_non_uni' value='Convert To non-unicode' type='button' onclick="convertToNonUnicode('convert_unicode', 'ip-file-content', 'load_font_mapper_file')" style="display:none;background-color:#FFF18F;display:none;"/></td></tr>
+        
+        <tr>
+            <td><text style="font-size: 12pt;background-color:#F0F18F"/><b>Is input ITRANS/<BR>Harvard/kyoto?</b></td>
+            <td><input type="button" id="engITransCheck" onClick="convertITransToUni('ip-file-content')"  style="cursor: pointer; font-size: 12pt;background-color:#d35a14be" value="Eng-iTRANS to Unicode"/></td></tr>
+            </table>    
+        <table border=1><tr>
+            <td><text style="font-size: 12pt;background-color:#F0F18F"/><b>Editor/Viewer options</b></td>
+            <td><text style="font-size: 12pt;background-color:#F0F18F"/><label style="font-size: 12pt;background-color:#F0F18F" for="switchTextAreaCtl" id="switchTextAreaLabel"> Check: To use Std.Textarea </label> <BR>
+            <input type="checkbox" id="switchTextAreaCtl"  name="switchTextAreaCtl" onclick="onSwitchTextAreaCtl('switchTextAreaCtl','switchTextAreaLabel', 'preserveTextFormat','preserveTextFormatLabel')" style="background-color:#F0F18F"/><BR>
+            <label id="preserveTextFormatLabel" style="font-size:6pt;display:block;background-color:#F0F18F">Click to preserve format<BR>[clean-up copy/paste]</label>
+            <input type="button" id="preserveTextFormat"  name="preserveTextFormat" onclick="onCheckPreserveTextFormat('preserveTextFormat')" style="cursor: pointer; font-size: 12pt;background-color:#e219c1" value="Preserve Format" /> </td></tr>
+        </table>    
+        <table border=1><tr><td>
+            <b style="font-size: 12pt;background-color:#F0F18F">Transliteration Tools:-</b>
+            </td><td>
+        <input type="button" id="TransBttn" value="Transliterate Now..." onclick="transliterateNow()" style="cursor: pointer; font-size: 14pt;background-color:#1f10f0; color:ivory"/> <BR>
+        </td></tr><tr><td>
+            <b style="font-size: 12pt;background-color:#F0F18F">Proof-Check tools:</b></td><td><b style="font-size: 12pt;background-color:#F0F18F"> Load .csv:</b> <BR> 
+                <input type='file' id='guideCSV-file-input'  onchange="loadTextArea('guideCSV-file-input','spellCheck-file-content_hidden', '0')" style="background-color:#FFF18F"/>
+         <b id="more_tools_group" style="display:block" disabled>   
+         <select id='dict_functions'  required  align=right  style="background-color:#FFF18F">
+            <option value="0"/> Run per .CSV rules
+            <option value="1"/> Ignore  .CSV prompts 
+            <option value="2"/> Ignore  .CSV Don't ask 
+        </select> <BR>
+        <input type="button" id="TamilGuideBttn" value="Check TamilGuide..." onclick="checkTamilGuide('ip-file-content', 'spellCheck-file-content_hidden', 'Tool_Execute_Result','dict_functions')" style="cursor: pointer; font-size: 14pt;background-color:#72083ad5; color:ivory"/>
+            <BR>
+        <input type="button" id="WordToWordBttn" value="WordToWord Check..." onclick="checkWordToWord('ip-file-content', 'Tool_Execute_Result')" style="cursor: pointer; background-color:#F0F18F"/>
+                <BR>
+            </b></td></tr><tr><td>
+                <b style="font-size: 12pt;background-color:#F0F18F">Create From Wordlist:</b>
+            </td><td>
+                <b style="font-size: 12pt;background-color:#F0F18F"> Load wordList:</b> <BR> 
+                    <input type='file' id='wordList-file-input'  onchange="loadTextArea('wordList-file-input','spellCheck-file-content_hidden', '1')" style="background-color:#FFF18F"/><BR>
+                    <input type="button" id="CreateGuideBttn" value="Create Guide From wordlist..." onclick="createGuideFromWordlist()" style="cursor: pointer; font-size: 14pt;background-color:#6946ccd5; color:rgb(10, 93, 99)"/>
+                    <BR>
+            
+            </td></tr>
+            <tr><td>
+            <input type="checkbox" id="checkDiac"  onclick="prepareToCheckDiacritics('checkDiac','check_diacritic_group')" /> <b style="font-size: 12pt;background-color:#F0F18F">Misc. Tools</b></td><td>
+            <p id="check_diacritic_group" style="font-size: 12pt;background-color:#0deb2a;display:none"> <b style="font-size: 12pt">select option:</b><br>
+            <select id='diacritic_check_selection'  required  align=right style="background-color:#FFF18F">
+            <option value="0"/> English-English
+            <option value="1"/> Tamil-English
+            </select><BR>
+            <input type="button" id="CheckDiacBttn" value="Check Diacritics Now" onclick="checkDiacriticsNow('diacritic_check_selection')" style="cursor: pointer; background-color:#F0F18F"/>
+            </p>
+        </td></tr></table>                
+    </td>
+    <td><textarea name="out_area" id='Tool_Execute_Result' rows="20" cols = "50" style="background-color:lightyellow;font-family:BBT-TM-Nitayanda; font-size: 14pt;"> </textarea></td>
+</tr>
+
+</table></div>
+
+
+<div id="windowGroup1" class="windowGroup" style="display:block;">
+
+    <!-- WINDOW 1 -->
+
+    <div id="window1"  style="display: none;">
+        <div id="headSub" class="purple">
+            <p class="windowTitle">Review Changes</p>
+        </div>
+        <div id="mainWindowModal1" class="mainWindow" contenteditable="true">
+            <p>Welcome to Window Engine !</p>
+            <p>Window Engine helps you start projects that need draggable windows.</p>
+        </div>
+        <div id="footerSub" class="purple">
+            <p class="windowTitle">
+                <text>Actions:</text>
+                <span class="tooltip">
+                    <input id="enableCatBrowse" type="checkbox" onClick="onEnableCatBrowse('enableCatBrowse','categoryLocatorSelect')"> </input>
+                        Choose Cat.:<select disabled id="categoryLocatorSelect" required align=right onchange="onCategoryLocatorSelect('categoryLocatorSelect')"></select>
+                        <label class='tooltiptext' id="toolTipText1"></label>
+                </span>
+            </p>
+            <span id="button1" onclick="showNextChange('mainWindowModal1', -1)"> <=previous</span>        
+            <span id="button2" onclick="showNextChange('mainWindowModal1', 1)"> Next=> </span>        
+            <span id="button3" onclick="acceptRejectChange('mainWindowModal1', 'acceptThis', false)"> Accept this</span>        
+            <span id="button4" onclick="acceptRejectChange('mainWindowModal1', 'acceptThis', true)"> Accept All[%d]</span>        
+            <span id="button5" onclick="acceptRejectChange('mainWindowModal1', 'rejectThis', false)"> Reject this</span>        
+            <span id="button6" onclick="acceptRejectChange('mainWindowModal1', 'rejectThis', true)"> Reject All[%d]</span>        
+            <span id="button7" onclick="commitAndUpdateChange('mainWindowModal1')"> Commit/Update</span>        
+        </div>
+    </div>    
+</div>
+<script type="text/javascript" src="popup_modal_engine.js"></script>
+</body>  
+</html>  
